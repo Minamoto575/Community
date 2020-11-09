@@ -6,18 +6,20 @@ import lombok.Data;
 
 /**
  * Author:Minamoto
- * Date:2020/11/8,10:56
+ * Date:2020/11/9,13:13
  */
 @Data
-public class User {
-    //mybatisPlus 需要额外注释主键自增
+public class Question {
     @TableId(type= IdType.AUTO)
     private Integer id;
-    private Long account_id;
-    private String name;
-    private String token;
+    private String title;
+    private String description;
     private Long gmt_create;
     private Long gmt_modified;
-    private String  bio;
-    private String avatar_url;
+    private Integer creator;
+    private Integer comment_count;
+    private Integer view_count;
+    private Integer like_count;
+    private String tag;
+
 }

@@ -2,7 +2,8 @@ package cn.krl.community.mapper;
 
 import cn.krl.community.model.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import lombok.Data;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * Author:Minamoto
@@ -10,4 +11,6 @@ import lombok.Data;
  */
 
 public interface UserMapper extends BaseMapper<User> {
+    @Select("select * from user where token = #{token}")
+    User getUserByToken(@Param("token") String token);
 }
