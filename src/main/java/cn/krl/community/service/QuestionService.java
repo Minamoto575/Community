@@ -27,6 +27,12 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    /**
+     * 首页问题获取
+     * @param page
+     * @param size
+     * @return
+     */
     public PaginationDTO list(Integer page, Integer size){
 
         //问题记录数
@@ -59,6 +65,13 @@ public class QuestionService {
         return pagination;
     }
 
+    /**
+     * 个人中心问题获取
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
     public PaginationDTO list(Integer userId,Integer page, Integer size){
 
         //问题记录数
@@ -92,4 +105,18 @@ public class QuestionService {
 
     }
 
+    /**
+     * 问题详情页获取
+     * @param id
+     * @return
+     */
+    public QuestionDTO getQuestionById(Integer id) {
+        QuestionDTO questionDTO = new QuestionDTO();
+        Question question = questionMapper.selectById(id);
+        BeanUtils.copyProperties(question,questionDTO);
+        //添加User
+        User user = userMapper.selectById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
 }
