@@ -5,12 +5,14 @@ import cn.krl.community.dto.GithubUserDTO;
 import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.User;
 import cn.krl.community.provider.GithubProvider;
+import cn.krl.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.util.UUID;
@@ -31,8 +33,9 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
+    //github返回后登录
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name = "state") String state,
@@ -53,19 +56,29 @@ public class AuthorizeController {
             user.setAccount_id(githubUser.getId());
             user.setName(githubUser.getName());
             user.setBio(githubUser.getBio());
-            user.setGmt_create(System.currentTimeMillis());
-            user.setGmt_modified(user.getGmt_create());
             user.setAvatar_url(githubUser.getAvatar_url());
             String token1 = UUID.randomUUID().toString();
             user.setToken(token1);
             //添加cookie
             response.addCookie(new Cookie("token",token1));
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             return "redirect:/";
         }
         else {
             //登录失败
             return "redirect:/";
         }
+    }
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response,
+                         HttpServletRequest request){
+
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        //立即传入
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/";
     }
 }

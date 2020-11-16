@@ -1,16 +1,20 @@
 package cn.krl.community.controller;
 
+import cn.krl.community.dto.QuestionDTO;
 import cn.krl.community.mapper.QuestionMapper;
 import cn.krl.community.model.Question;
 import cn.krl.community.model.User;
+import cn.krl.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 /**
  * Author:Minamoto
@@ -20,10 +24,24 @@ import javax.servlet.http.HttpServletRequest;
 public class pulishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
+
 
     @GetMapping("/publish")
     public String publish(){
+        return "publish" ;
+    }
+
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                          Model model){
+
+        QuestionDTO question = questionService.getQuestionById(id);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        //id传给前端，再传入doPublish做判断
+        model.addAttribute("id",id);
         return "publish" ;
     }
 
@@ -31,6 +49,7 @@ public class pulishController {
     public String doPublish(@RequestParam("title") String title,
                             @RequestParam("description") String description,
                             @RequestParam("tag") String tag,
+                            @RequestParam(value = "id",required = false)Integer id,
                             HttpServletRequest request,
                             Model model){
 
@@ -63,10 +82,9 @@ public class pulishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmt_create(System.currentTimeMillis());
-        question.setGmt_modified(question.getGmt_create());
+        question.setId(id);
 
-        questionMapper.insert(question);
+        questionService.creatOrUpdate(question);
 
         return "redirect:/";
     }

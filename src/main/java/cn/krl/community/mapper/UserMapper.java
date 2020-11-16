@@ -13,4 +13,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper extends BaseMapper<User> {
     @Select("select * from user where token = #{token}")
     User getUserByToken(@Param("token") String token);
+
+    @Select("select * from user where account_id = #{accountId}")
+    User selectByAccountId(@Param("accountId") Long accountId);
 }
