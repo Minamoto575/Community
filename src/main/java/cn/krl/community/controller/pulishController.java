@@ -27,11 +27,13 @@ public class pulishController {
     private QuestionService questionService;
 
 
+    //点击logo
     @GetMapping("/publish")
     public String publish(){
         return "publish" ;
     }
 
+    //问题编辑
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Integer id,
                           Model model){
@@ -45,6 +47,7 @@ public class pulishController {
         return "publish" ;
     }
 
+    //问题发布
     @PostMapping("/publish")
     public String doPublish(@RequestParam("title") String title,
                             @RequestParam("description") String description,

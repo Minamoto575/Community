@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-@MapperScan("cn.krl.community.mapper")
+@MapperScan(basePackages = "cn.krl.community.mapper")
 public class CommunityApplication {
 
     public static void main(String[] args) {

@@ -35,7 +35,13 @@ public class AuthorizeController {
     @Autowired
     private UserService userService;
 
-    //github返回后登录
+    /**
+     * github第三方登录
+     * @param code
+     * @param state
+     * @param response
+     * @return
+     */
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name = "state") String state,
@@ -46,17 +52,19 @@ public class AuthorizeController {
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
+        //获取token
         String token = githubProvider.getAccessToken(accessTokenDTO);
+        //获取User信息
         GithubUserDTO githubUser= githubProvider.getUser(token);
-        System.out.println(githubUser);
+        // System.out.println(githubUser);
 
         if (githubUser != null){
             //登陆成功
             User user =new User();
-            user.setAccount_id(githubUser.getId());
+            user.setAccountId(githubUser.getId());
             user.setName(githubUser.getName());
             user.setBio(githubUser.getBio());
-            user.setAvatar_url(githubUser.getAvatar_url());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             String token1 = UUID.randomUUID().toString();
             user.setToken(token1);
             //添加cookie
@@ -69,6 +77,13 @@ public class AuthorizeController {
             return "redirect:/";
         }
     }
+
+    /**
+     * 退出登录
+     * @param response
+     * @param request
+     * @return
+     */
     @GetMapping("/logout")
     public String logout(HttpServletResponse response,
                          HttpServletRequest request){

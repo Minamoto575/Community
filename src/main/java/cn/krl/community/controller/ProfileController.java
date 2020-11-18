@@ -22,6 +22,15 @@ public class ProfileController {
     @Autowired
     QuestionService questionService;
 
+    /**
+     * 用户个人中心
+     * @param action  我的问题 or 通知
+     * @param model
+     * @param request
+     * @param page   当前页码
+     * @param size   页面大小
+     * @return
+     */
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable("action")String action,
                           Model model,
