@@ -2,6 +2,8 @@ package cn.krl.community.service;
 
 import cn.krl.community.dto.PaginationDTO;
 import cn.krl.community.dto.QuestionDTO;
+import cn.krl.community.exception.CustomizeErrorCode;
+import cn.krl.community.exception.CustomizeException;
 import cn.krl.community.mapper.QuestionMapper;
 import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.Question;
@@ -124,6 +126,9 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
 
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         BeanUtils.copyProperties(question,questionDTO);
         //添加User
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -149,7 +154,9 @@ public class QuestionService {
             QuestionExample example = new QuestionExample();
             example.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            int result=questionMapper.updateByExampleSelective(updateQuestion, example);
+            if (result==0)
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
     }
 }
