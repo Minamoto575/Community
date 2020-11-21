@@ -2,7 +2,6 @@ package cn.krl.community.controller;
 
 import cn.krl.community.dto.AccessTokenDTO;
 import cn.krl.community.dto.GithubUserDTO;
-import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.User;
 import cn.krl.community.provider.GithubProvider;
 import cn.krl.community.service.UserService;

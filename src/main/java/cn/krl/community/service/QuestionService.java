@@ -4,16 +4,15 @@ import cn.krl.community.dto.PaginationDTO;
 import cn.krl.community.dto.QuestionDTO;
 import cn.krl.community.exception.CustomizeErrorCode;
 import cn.krl.community.exception.CustomizeException;
+import cn.krl.community.mapper.QuestionExtMapper;
 import cn.krl.community.mapper.QuestionMapper;
 import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.Question;
 import cn.krl.community.model.QuestionExample;
 import cn.krl.community.model.User;
-import org.apache.ibatis.jdbc.Null;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +29,8 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     /**
      * 首页问题获取
@@ -142,6 +143,9 @@ public class QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setCommentCount(0);
+            question.setViewCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         }else {
             //更新
@@ -158,5 +162,12 @@ public class QuestionService {
             if (result==0)
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
+    }
+    //阅读数+1
+    public void incView(Integer id){
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }

@@ -12,3 +12,5 @@
 - [拦截器](https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/web.html#mvc-handlermapping-interceptor)
 - [Mybatis Generator](http://mybatis.org/generator/index.html)
 - [Markdown Editor](https://pandao.github.io/editor.md/)
+
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
