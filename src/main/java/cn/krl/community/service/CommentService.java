@@ -10,6 +10,9 @@ import cn.krl.community.model.Comment;
 import cn.krl.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.beans.Transient;
 
 /**
  * Author:Minamoto
@@ -24,6 +27,9 @@ public class CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
+
+    //事务处理
+    @Transactional
     public void insert(Comment comment) {
 
         //评论对象不存在

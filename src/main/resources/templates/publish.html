@@ -16,6 +16,7 @@
         <div class="col-lg-9 col-sm-12 col-md-12 col-xs-12">
             <h2><span class="glyphicon  glyphicon-plus" aria-hidden="true"></span>发布问题</h2>
             <hr>
+            <!--发布框-->
             <form action="/publish" method="post">
                 <input class="hidden" name="id" th:value="${id}">
                 <div class="form-group">
@@ -39,6 +40,8 @@
             </form>
 
         </div>
+
+        <!--发布指南-->
         <div class="col-lg-3 col-sm-12 col-md-12 col-xs-12" >
             <h3>问题发布指南</h3>
             · 问题标题：用精简的语言描述你的问题<br>
