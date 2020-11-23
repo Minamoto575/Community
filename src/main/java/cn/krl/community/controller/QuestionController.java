@@ -1,12 +1,18 @@
 package cn.krl.community.controller;
 
+import cn.krl.community.dto.CommentDTO;
 import cn.krl.community.dto.QuestionDTO;
+import cn.krl.community.enums.CommentTypeEnum;
+import cn.krl.community.model.Comment;
+import cn.krl.community.service.CommentService;
 import cn.krl.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 /**
  * Author:Minamoto
@@ -16,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private CommentService commentService;
 
     //问题详细页展示
     @GetMapping("/question/{id}")
@@ -25,6 +33,8 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.getQuestionById(id);
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
+        List<CommentDTO> comments = commentService.listByQuestionOrCommentId(id, CommentTypeEnum.QUESTION);
+        model.addAttribute("comments",comments);
         return "question";
 
     }

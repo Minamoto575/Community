@@ -9,6 +9,16 @@
     <script src="/js/jquery-3.5.1.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+<!--关闭不必要的新加载的页面-->
+<script type="application/javascript">
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        if (closable=="true") {
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main" >

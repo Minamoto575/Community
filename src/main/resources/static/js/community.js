@@ -2,6 +2,11 @@
 function post() {
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
+
+    if(!content){
+        alert("评论不能为空噢");
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/comment",
@@ -12,10 +17,22 @@ function post() {
             "type": 1
         }),
         success: function (response) {
-            if(response.val()==200){
-                $("#comment_section").hide();
+            if(response.code == 2000){
+                //$("#comment_section").hide();
+                window.location.reload();
             }else {
-                alert(response.message);
+                //未登录的异常
+                if (response.code == 2003) {
+                    var isAccepted = confirm(response.message);
+                    if (isAccepted) {
+                        window.open("https://github.com/login/oauth/authorize?client_id=0a411363f8e206c2e284&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                        window.localStorage.setItem("closable", true);
+                    }
+                }
+                //其他异常
+                else {
+                    alert(response.message);
+                }
             }
 
         },
