@@ -4,10 +4,7 @@ import cn.krl.community.dto.CommentDTO;
 import cn.krl.community.enums.CommentTypeEnum;
 import cn.krl.community.exception.CustomizeErrorCode;
 import cn.krl.community.exception.CustomizeException;
-import cn.krl.community.mapper.CommentMapper;
-import cn.krl.community.mapper.QuestionExtMapper;
-import cn.krl.community.mapper.QuestionMapper;
-import cn.krl.community.mapper.UserMapper;
+import cn.krl.community.mapper.*;
 import cn.krl.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class CommentService {
     private CommentMapper commentMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CommentExtMapper commentExtMapper;
 
     //事务处理
     @Transactional
@@ -49,12 +48,23 @@ public class CommentService {
 
         //正常插入
         if(comment.getType()==CommentTypeEnum.COMMENT.getType()){
+
             //回复评论
+
+            //拿到二级评论的父评论
             Comment dbComment= commentMapper.selectByPrimaryKey(comment.getParentId());
             if(dbComment==null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+            //根据回复的评论拿到父问题
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+
             commentMapper.insert(comment);
+            dbComment.setCommentCount(1);
+            commentExtMapper.incComment(dbComment);
 
         }else{
             //回复问题
@@ -68,7 +78,7 @@ public class CommentService {
         }
     }
 
-    //根据id获取评论，包括一级评论与二级评论
+    //根据id获取评论，包括一级评论
     public List<CommentDTO> listByQuestionOrCommentId(Integer id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()

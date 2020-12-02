@@ -10,6 +10,7 @@ function post() {
 function comment() {
     var commentId = $("#comment_id").val();
     var content = $("#input-" + commentId).val();
+    console.log(content);
     comment2target(commentId, 2, content);
 }
 
@@ -101,6 +102,7 @@ function collapseComments(e) {
                         "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
                     }).append(mediaElement);
 
+                    //父元素之前追加
                     subCommentContainer.prepend(commentElement);
                 });
                 //展开二级评论
