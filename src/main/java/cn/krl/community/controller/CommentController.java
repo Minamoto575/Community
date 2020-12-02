@@ -1,7 +1,9 @@
 package cn.krl.community.controller;
 
 import cn.krl.community.dto.CommentCreateDTO;
+import cn.krl.community.dto.CommentDTO;
 import cn.krl.community.dto.ResultDTO;
+import cn.krl.community.enums.CommentTypeEnum;
 import cn.krl.community.exception.CustomizeErrorCode;
 import cn.krl.community.mapper.CommentMapper;
 import cn.krl.community.model.Comment;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Author:Minamoto
@@ -51,5 +54,13 @@ public class CommentController {
         commentService.insert(comment);
         //评论成功
         return ResultDTO.okOf();
+    }
+
+    //获取二级评论列表的接口
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Integer id) {
+        List<CommentDTO> commentDTOS = commentService.listByQuestionOrCommentId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOS);
     }
 }

@@ -2,51 +2,18 @@
 function post() {
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
-
-    if(!content){
-        alert("评论不能为空噢");
-        return;
-    }
-    $.ajax({
-        type: "POST",
-        url: "/comment",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "parentId": questionId,
-            "content": content,
-            "type": 1
-        }),
-        success: function (response) {
-            if(response.code == 2000){
-                //$("#comment_section").hide();
-                window.location.reload();
-            }else {
-                //未登录的异常
-                if (response.code == 2003) {
-                    var isAccepted = confirm(response.message);
-                    if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=0a411363f8e206c2e284&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
-                        window.localStorage.setItem("closable", true);
-                    }
-                }
-                //其他异常
-                else {
-                    alert(response.message);
-                }
-            }
-
-        },
-        dataType: "json"
-    });
+    comment2target(questionId, 1, content);
 
 }
 
+//提交二级回复
 function comment() {
     var commentId = $("#comment_id").val();
     var content = $("#input-" + commentId).val();
     comment2target(commentId, 2, content);
 }
 
+//具体提交评论的方法
 function comment2target(targetId, type, content) {
     if (!content) {
         alert("不能回复空内容");
