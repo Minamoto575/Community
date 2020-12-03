@@ -1,6 +1,5 @@
 package cn.krl.community.dto;
 
-import cn.krl.community.model.Question;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,12 +11,11 @@ import java.util.List;
  */
 @Data
 public class PaginationDTO <T> {
-    private List<T> questions;
+    private List<T> data;
     private boolean showPrevious;
     private boolean showFirst;
     private boolean showNext;
     private boolean showEndPage;
-
 
     private Integer page;   //当前页码
     private List<Integer> pages = new ArrayList<>();    //底部展示页号的数组

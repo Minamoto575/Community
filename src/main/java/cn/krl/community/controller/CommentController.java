@@ -41,7 +41,6 @@ public class CommentController {
         if (commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
             return ResultDTO.errorOf(CustomizeErrorCode.CONTENT_IS_EMPTY);
         }
-
         Comment comment =new Comment();
         comment.setParentId(commentCreateDTO.getParentId());
         comment.setContent(commentCreateDTO.getContent());
@@ -51,7 +50,8 @@ public class CommentController {
         comment.setCommentator(user.getId());
         comment.setLikeCount(0);
         comment.setCommentCount(0);
-        commentService.insert(comment);
+
+        commentService.insert(comment,user);
         //评论成功
         return ResultDTO.okOf();
     }

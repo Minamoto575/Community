@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Minamoto社区-发布</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
@@ -12,7 +12,7 @@
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
-<div class="container-fluid main" >
+<div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-sm-12 col-md-12 col-xs-12">
             <h2><span class="glyphicon  glyphicon-plus" aria-hidden="true"></span>发布问题</h2>
@@ -22,16 +22,18 @@
                 <input class="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题</label>
-                    <input type="text" class="form-control"  th:value="${title}" name = "title" id="title" autocomplete="off" placeholder="问题标题....">
+                    <input type="text" class="form-control" th:value="${title}" name="title" id="title"
+                           autocomplete="off" placeholder="问题标题....">
                 </div>
                 <div class="form-group">
                     <label for="description">问题描述</label>
-                    <textarea name="description" class="form-control"  id= "description" cols="30" rows="10" th:text="${description}"></textarea>
+                    <textarea name="description" class="form-control" id="description" cols="30" rows="10"
+                              th:text="${description}"></textarea>
                 </div>
                 <!--标签-->
                 <div class="form-group">
                     <label for="tag">标签</label>
-                    <input type="text" class="form-control" th:value="${tag}" name ="tag" id="tag"
+                    <input type="text" class="form-control" th:value="${tag}" name="tag" id="tag"
                            autocomplete="off" placeholder="输入标签，以，隔开" onclick="showSelectTag()">
                     <div id="selectTag" class="publish-tag-tab">
 
@@ -68,7 +70,7 @@
         </div>
 
         <!--发布指南-->
-        <div class="col-lg-3 col-sm-12 col-md-12 col-xs-12" >
+        <div class="col-lg-3 col-sm-12 col-md-12 col-xs-12">
             <h3>问题发布指南</h3>
             · 问题标题：用精简的语言描述你的问题<br>
             · 问题补充：详细补充问题内容<br>

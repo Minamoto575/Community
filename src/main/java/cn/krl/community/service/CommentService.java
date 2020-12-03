@@ -2,6 +2,8 @@ package cn.krl.community.service;
 
 import cn.krl.community.dto.CommentDTO;
 import cn.krl.community.enums.CommentTypeEnum;
+import cn.krl.community.enums.NotificationStatusEnum;
+import cn.krl.community.enums.NotificationTypeEnum;
 import cn.krl.community.exception.CustomizeErrorCode;
 import cn.krl.community.exception.CustomizeException;
 import cn.krl.community.mapper.*;
@@ -33,10 +35,12 @@ public class CommentService {
     private UserMapper userMapper;
     @Autowired
     private CommentExtMapper commentExtMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
 
     //事务处理
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment,User commentator) {
         //评论对象不存在
         if(comment.getParentId()==null||comment.getParentId()==0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
@@ -48,7 +52,6 @@ public class CommentService {
 
         //正常插入
         if(comment.getType()==CommentTypeEnum.COMMENT.getType()){
-
             //回复评论
 
             //拿到二级评论的父评论
@@ -65,6 +68,8 @@ public class CommentService {
             commentMapper.insert(comment);
             dbComment.setCommentCount(1);
             commentExtMapper.incComment(dbComment);
+            //创建通知
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
 
         }else{
             //回复问题
@@ -75,7 +80,27 @@ public class CommentService {
             commentMapper.insert(comment);
             dbQuestion.setCommentCount(1);
             questionExtMapper.incComment(dbQuestion);
+            //创建通知
+            createNotify(comment, dbQuestion.getCreator(), commentator.getName(), dbQuestion.getTitle(), NotificationTypeEnum.REPLY_QUESTION, dbQuestion.getId());
         }
+    }
+
+    //创建通知
+    private void createNotify(Comment comment, Integer receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Integer outerId) {
+        //如果通知者和接收者是一个人，则不需要通知
+        if (receiver == comment.getCommentator()) {
+            return;
+        }
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setNotifier(comment.getCommentator());
+        notification.setType(notificationType.getType());
+        notification.setOuterId(outerId);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setReceiver(receiver);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notificationMapper.insert(notification);
     }
 
     //根据id获取评论，包括一级评论

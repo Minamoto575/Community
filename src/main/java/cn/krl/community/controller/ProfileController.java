@@ -2,6 +2,7 @@ package cn.krl.community.controller;
 
 import cn.krl.community.dto.PaginationDTO;
 import cn.krl.community.model.User;
+import cn.krl.community.service.NotificationService;
 import cn.krl.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@ public class ProfileController {
 
     @Autowired
     QuestionService questionService;
+    @Autowired
+    NotificationService notificationService;
 
     /**
      * 用户个人中心
@@ -51,6 +54,11 @@ public class ProfileController {
         }else if("replies".equals(action)){
             model.addAttribute("section","replies");
             model.addAttribute("sectionName", "最新回复");
+            //获取通知
+            PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);
+           //  Long unreadCount = notificationService.unreadCount(user.getId());
+            model.addAttribute("pagination", paginationDTO);
+            //model.addAttribute("unreadCount", unreadCount);
         }
         return "profile";
 

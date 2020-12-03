@@ -1,8 +1,10 @@
 package cn.krl.community.interceptor;
 
+import cn.krl.community.mapper.NotificationMapper;
 import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.User;
 import cn.krl.community.model.UserExample;
+import cn.krl.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,6 +25,8 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -37,6 +41,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> users = userMapper.selectByExample(example);
                     if (!users.isEmpty()) {
                         request.getSession().setAttribute("user", users.get(0));
+                        //将未读消息数也放入
+                        Long unreadCount = notificationService.unreadCount(users.get(0).getId());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     }
                     break;
                 }

@@ -70,7 +70,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         //二次封装成paginationDTO
-        pagination.setQuestions(questionDTOList);
+        pagination.setData(questionDTOList);
         pagination.setPagination(totalPage,page,size);
 
         return pagination;
@@ -87,7 +87,7 @@ public class QuestionService {
 
         //问题记录数
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andIdEqualTo(userId);
+        example.createCriteria().andCreatorEqualTo(userId);
 
         Integer totalCount = (int) questionMapper.countByExample(example);
         //页面总数
@@ -115,7 +115,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         //二次封装成paginationDTO
-        pagination.setQuestions(questionDTOList);
+        pagination.setData(questionDTOList);
         pagination.setPagination(totalPage,page,size);
 
         return pagination;
