@@ -1,7 +1,7 @@
 package cn.krl.community.controller;
 
+import cn.krl.community.cache.TagCache;
 import cn.krl.community.dto.QuestionDTO;
-import cn.krl.community.mapper.QuestionMapper;
 import cn.krl.community.model.Question;
 import cn.krl.community.model.User;
 import cn.krl.community.service.QuestionService;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 /**
  * Author:Minamoto
@@ -29,7 +28,8 @@ public class pulishController {
 
     //点击logo
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("tags", TagCache.get());
         return "publish" ;
     }
 
@@ -44,6 +44,7 @@ public class pulishController {
         model.addAttribute("tag",question.getTag());
         //id传给前端，再传入doPublish做判断
         model.addAttribute("id",id);
+        model.addAttribute("tags", TagCache.get());
         return "publish" ;
     }
 
@@ -59,6 +60,7 @@ public class pulishController {
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
+        model.addAttribute("tags", TagCache.get());
 
         if (title == null || title.equals("")) {
             model.addAttribute("error", "标题不能为空");
