@@ -31,17 +31,17 @@
                 </span>
                 <hr>
                 <!--问题描述-->
-                <div id="question-view">
-                    <textarea style="display:none;" th:text="${question.description}"></textarea>
-                </div>
                 <!--<div id="question-view">-->
                     <!--<textarea style="display:none;" th:text="${question.description}"></textarea>-->
                 <!--</div>-->
-                <!--<script type="text/javascript">-->
-                    <!--$(function () {-->
-                        <!--var testView = editormd.markdownToHTML("question-view", {});-->
-                    <!--});-->
-                <!--</script>-->
+                <div id="question-view">
+                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                </div>
+                <script type="text/javascript">
+                    $(function () {
+                        var testView = editormd.markdownToHTML("question-view", {});
+                    });
+                </script>
                 <br>
                 <hr class="sp-bottom">
 
