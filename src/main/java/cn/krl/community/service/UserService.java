@@ -34,12 +34,14 @@ public class UserService {
             updateUser.setGmtModified(System.currentTimeMillis());
             updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setName(user.getName());
+            updateUser.setBio(user.getBio());
+          //  updateUser.setAccountId(dbUser.getAccountId());
             updateUser.setToken(user.getToken());
             UserExample example1 = new UserExample();
             example1.createCriteria()
                     .andIdEqualTo(dbUser.getId());
             //为空的数据项不更新
-            userMapper.updateByExampleSelective(updateUser, new UserExample());
+            userMapper.updateByExampleSelective(updateUser, example1);
         }
 
     }

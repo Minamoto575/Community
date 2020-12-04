@@ -39,7 +39,7 @@
                         <a th:href="@{'/question/' + ${question.id}}" th:text="${question.title}"></a>
                     </h4>
                     <span th:text="${question.description}"></span><br>
-                    <span class="text_desc">
+                    <span class="text-desc">
                         <span th:text="${question.commentCount}"></span> 个回复 •
                         <span th:text="${question.viewCount}"></span> 次浏览 • 发布时间
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
@@ -82,5 +82,6 @@
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: footer}"></div>
 </body>
 </html>

@@ -10,6 +10,7 @@ import cn.krl.community.mapper.NotificationMapper;
 import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.Notification;
 import cn.krl.community.model.NotificationExample;
+import cn.krl.community.model.QuestionExample;
 import cn.krl.community.model.User;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +35,18 @@ public class NotificationService {
     //列出通知
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
 
+        //拿到某用户收到通知的总数
+        NotificationExample example = new NotificationExample();
+        example.createCriteria().andReceiverEqualTo(userId);
+        Integer totalCount = (int) notificationMapper.countByExample(example);
+
+        //页面总数
+        int totalPage = (int) Math.ceil((double)totalCount/size);
+        //合法性判断
+        if(page>totalPage) page=totalPage;
+        if(page<1)  page = 1;
         int offset = size * (page - 1);
+
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria()
                 .andReceiverEqualTo(userId);
@@ -57,13 +69,9 @@ public class NotificationService {
         //将该页的通知列表放入页信息对象中
         paginationDTO.setData(notificationDTOS);
 
-        //拿到某用户收到通知的总数
-        NotificationExample notificationExample1 = new NotificationExample();
-        notificationExample1.createCriteria()
-                .andReceiverEqualTo(userId);
-        Integer totalCount = (int)notificationMapper.countByExample(notificationExample1);
+
         //在PaginationDTO类的逻辑中设置一些其他的信息
-        paginationDTO.setPagination(totalCount, page, size);
+        paginationDTO.setPagination(totalPage, page, size);
 
         return paginationDTO;
     }

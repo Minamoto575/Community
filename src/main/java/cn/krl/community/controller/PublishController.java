@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * Date:2020/11/9,12:19
  */
 @Controller
-public class pulishController {
+public class PublishController {
 
     @Autowired
     private QuestionService questionService;
