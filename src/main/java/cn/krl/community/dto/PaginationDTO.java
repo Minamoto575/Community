@@ -10,6 +10,7 @@ import java.util.List;
  * Date:2020/11/14,16:00
  */
 @Data
+//分页DTO，包括主页问题展示，个人问题展示，通知展示，都要用到分页
 public class PaginationDTO <T> {
     private List<T> data;
     private boolean showPrevious;
@@ -22,7 +23,6 @@ public class PaginationDTO <T> {
     private Integer totalPage;  //页面总数
 
     public void setPagination(Integer totalPage, Integer page, Integer size) {
-
 
         this.totalPage = totalPage;
 
@@ -66,6 +66,5 @@ public class PaginationDTO <T> {
         } else {
             showEndPage = true;
         }
-
     }
 }

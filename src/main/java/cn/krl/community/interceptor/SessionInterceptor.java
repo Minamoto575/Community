@@ -1,6 +1,5 @@
 package cn.krl.community.interceptor;
 
-import cn.krl.community.mapper.NotificationMapper;
 import cn.krl.community.mapper.UserMapper;
 import cn.krl.community.model.User;
 import cn.krl.community.model.UserExample;
@@ -29,7 +28,9 @@ public class SessionInterceptor implements HandlerInterceptor {
     private NotificationService notificationService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
         //验证用户
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {

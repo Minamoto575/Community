@@ -66,9 +66,8 @@ public class NotificationService {
             notificationDTOS.add(notificationDTO);
         }
 
-        //将该页的通知列表放入页信息对象中
+        //将该页的通知列表放入页信息对象中，二次封装
         paginationDTO.setData(notificationDTOS);
-
 
         //在PaginationDTO类的逻辑中设置一些其他的信息
         paginationDTO.setPagination(totalPage, page, size);
@@ -87,8 +86,8 @@ public class NotificationService {
 
     //标记通知已读
     public NotificationDTO read(Integer id, User user) {
-
         Notification notification = notificationMapper.selectByPrimaryKey(id);
+        //异常处理
         if (notification == null) {
             throw new CustomizeException(CustomizeErrorCode.NOTIFICATION_NOT_FOUND);
         }
@@ -101,9 +100,9 @@ public class NotificationService {
 
         NotificationDTO notificationDTO = new NotificationDTO();
         BeanUtils.copyProperties(notification, notificationDTO);
+        //设置通知类型
         notificationDTO.setTypeName(NotificationTypeEnum.nameOf(notification.getType()));
         return notificationDTO;
-
     }
 
 }

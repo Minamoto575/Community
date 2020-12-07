@@ -8,6 +8,7 @@ import lombok.Data;
  * Date:2020/11/19,17:01
  */
 @Data
+//评论展示时用的DTO
 public class CommentDTO {
     private Integer id;
     private Integer parentId;

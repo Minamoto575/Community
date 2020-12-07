@@ -30,18 +30,12 @@ public class UserService {
             //更新
             //更新时间需要修改，头像、名字信息可能变化，也需要更新
             User dbUser = users.get(0);
-            User updateUser = new User();
-            updateUser.setGmtModified(System.currentTimeMillis());
-            updateUser.setAvatarUrl(user.getAvatarUrl());
-            updateUser.setName(user.getName());
-            updateUser.setBio(user.getBio());
-          //  updateUser.setAccountId(dbUser.getAccountId());
-            updateUser.setToken(user.getToken());
-            UserExample example1 = new UserExample();
-            example1.createCriteria()
-                    .andIdEqualTo(dbUser.getId());
-            //为空的数据项不更新
-            userMapper.updateByExampleSelective(updateUser, example1);
+            dbUser.setGmtModified(System.currentTimeMillis());
+            dbUser.setAvatarUrl(user.getAvatarUrl());
+            dbUser.setName(user.getName());
+            dbUser.setBio(user.getBio());
+            dbUser.setToken(user.getToken());
+            userMapper.updateByPrimaryKey(dbUser);
         }
 
     }

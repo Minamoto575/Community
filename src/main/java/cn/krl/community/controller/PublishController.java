@@ -25,20 +25,19 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
-
-    //点击logo
+    //点击logo 进入发布问题界面
     @GetMapping("/publish")
     public String publish(Model model){
         model.addAttribute("tags", TagCache.get());
         return "publish" ;
     }
 
-    //问题编辑
+    //问题编辑/问题更新
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Integer id,
                           Model model){
-
         QuestionDTO question = questionService.getQuestionById(id);
+        //用于信息复原
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
@@ -53,15 +52,22 @@ public class PublishController {
     public String doPublish(@RequestParam("title") String title,
                             @RequestParam("description") String description,
                             @RequestParam("tag") String tag,
-                            @RequestParam(value = "id",required = false)Integer id,
+                            @RequestParam(value = "id",required = false)Integer id, //编辑页传入的问题id
                             HttpServletRequest request,
                             Model model){
 
+        User user = (User) request.getSession().getAttribute("user");
+        if(user == null){
+            model.addAttribute("error","用户未登录");
+            return "publish";
+        }
+        //用于前端复原
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
         model.addAttribute("tags", TagCache.get());
 
+        //内容为空时进行提示
         if (title == null || title.equals("")) {
             model.addAttribute("error", "标题不能为空");
             return "publish";
@@ -75,20 +81,14 @@ public class PublishController {
             return "publish";
         }
 
-        User user = (User) request.getSession().getAttribute("user");
-        if(user == null){
-            model.addAttribute("error","用户未登录");
-            return "publish";
-        }
-
         Question question = new Question();
-        //设置问题信息
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
         question.setId(id);
 
+        //创建或者更新问题
         questionService.creatOrUpdate(question);
 
         return "redirect:/";

@@ -36,7 +36,7 @@ public class QuestionController {
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
 
-        //获取该问题的评论
+        //获取该问题的一级评论
         List<CommentDTO> comments = commentService.listByQuestionOrCommentId(id, CommentTypeEnum.QUESTION);
         model.addAttribute("comments",comments);
 

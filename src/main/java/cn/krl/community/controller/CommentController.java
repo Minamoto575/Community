@@ -61,6 +61,7 @@ public class CommentController {
     @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
     public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Integer id) {
         List<CommentDTO> commentDTOS = commentService.listByQuestionOrCommentId(id, CommentTypeEnum.COMMENT);
+        //请求成功并返回二级评论列表
         return ResultDTO.okOf(commentDTOS);
     }
 }

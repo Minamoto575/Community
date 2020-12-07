@@ -5,7 +5,6 @@ package cn.krl.community.enums;
  * Date:2020/12/3,14:31
  */
 public enum NotificationStatusEnum {
-
     UNREAD(0),
     READ(1);
     private int status;

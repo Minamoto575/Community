@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 //处理CustomizeExceptionHandler 没处理的异常
 @Controller
@@ -26,11 +25,11 @@ public class CustomizeErrorController implements ErrorController {
         HttpStatus status = this.getStatus(request);
         //前端异常
         if (status.is4xxClientError()) {
-            model.addAttribute("message", "你这个请求错了！");
+            model.addAttribute("message", "前端异常！");
         }
         //后端异常
         if (status.is5xxServerError()) {
-            model.addAttribute("message", "服务器错误");
+            model.addAttribute("message", "后端异常！");
         }
         return new ModelAndView("error");
     }

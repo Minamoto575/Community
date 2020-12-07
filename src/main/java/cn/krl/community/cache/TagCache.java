@@ -10,6 +10,7 @@ import java.util.List;
  * Author:Minamoto
  * Date:2020/12/3,11:22
  */
+//自定义的标签
 public class TagCache {
     public static List<TagDTO> get() {
         ArrayList<TagDTO> tagDTOS = new ArrayList<>();

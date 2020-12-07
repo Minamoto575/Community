@@ -7,6 +7,7 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 
+//调用github的API，进行第三方登录
 @Component
 public class GithubProvider {
 

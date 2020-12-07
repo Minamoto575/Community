@@ -1,5 +1,6 @@
 package cn.krl.community.exception;
 
+//自定义异常
 public class CustomizeException extends RuntimeException {
     private String message;
     private Integer code;

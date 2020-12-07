@@ -1,5 +1,7 @@
 package cn.krl.community.exception;
 
+
+//自定义错误码
 public enum CustomizeErrorCode implements ICustomizeErrorCode {
 
     QUESTION_NOT_FOUND(2001, "你找到问题不存在了，要不换一个试试？"),

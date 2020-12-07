@@ -38,8 +38,7 @@ public class CommentService {
     @Autowired
     NotificationMapper notificationMapper;
 
-    //事务处理
-    @Transactional
+    @Transactional   //事务处理 实质时使用了jdbc
     public void insert(Comment comment,User commentator) {
         //评论对象不存在
         if(comment.getParentId()==null||comment.getParentId()==0) {
@@ -70,7 +69,6 @@ public class CommentService {
             commentExtMapper.incComment(dbComment);
             //创建通知
             createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
-
         }else{
             //回复问题
             Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -85,7 +83,15 @@ public class CommentService {
         }
     }
 
-    //创建通知
+    /**
+     *  创建通知
+     * @param comment 评论（通知）
+     * @param receiver 接收者id
+     * @param notifierName 通知发送者名称
+     * @param outerTitle 问题名称
+     * @param notificationType 通知类型
+     * @param outerId 问题id
+     */
     private void createNotify(Comment comment, Integer receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Integer outerId) {
         //如果通知者和接收者是一个人，则不需要通知
         if (receiver == comment.getCommentator()) {
@@ -103,7 +109,7 @@ public class CommentService {
         notificationMapper.insert(notification);
     }
 
-    //根据id获取评论，包括一级评论
+    //根据id获取评论，包括一、二级评论
     public List<CommentDTO> listByQuestionOrCommentId(Integer id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
@@ -132,6 +138,7 @@ public class CommentService {
         List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
             BeanUtils.copyProperties(comment, commentDTO);
+            //添加留下评论的用户
             commentDTO.setUser(userMap.get(comment.getCommentator()));
             return commentDTO;
         }).collect(Collectors.toList());

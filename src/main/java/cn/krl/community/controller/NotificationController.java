@@ -33,6 +33,7 @@ public class NotificationController {
 
         if ((NotificationTypeEnum.REPLY_COMMENT.getType() == notificationDTO.getType())
                 || (NotificationTypeEnum.REPLY_QUESTION.getType())== notificationDTO.getType()) {
+            //进入回复的问题页面
             return "redirect:/question/" + notificationDTO.getOuterId();
         } else {
             return "redirect:/";

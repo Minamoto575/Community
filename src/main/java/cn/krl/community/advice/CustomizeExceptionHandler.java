@@ -8,17 +8,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 
 @ResponseBody
-@ControllerAdvice
+@ControllerAdvice   //Controller的增强 通常用于异常处理 此处实现全局异常的回调
 public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
     Object handleControllerException(HttpServletRequest request, Throwable e, Model model) {
-
         String contentType = request.getContentType();
-
         if ("application/json".equals(contentType)) {
             //返回json
             if (e instanceof CustomizeException) {
@@ -35,9 +32,7 @@ public class CustomizeExceptionHandler {
                 model.addAttribute("message", CustomizeErrorCode.SYSTEM_ERROR.getMessage());
             }
             return new ModelAndView("error");
-
         }
-
 
     }
 

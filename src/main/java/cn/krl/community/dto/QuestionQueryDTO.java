@@ -7,8 +7,9 @@ import lombok.Data;
  * Date:2020/12/4,19:28
  */
 @Data
+//question搜索用的DTO
 public class QuestionQueryDTO {
     private String search;
-    private Integer page;
+    private Integer offset;
     private Integer size;
 }

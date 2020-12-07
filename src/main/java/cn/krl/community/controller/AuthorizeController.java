@@ -16,10 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.UUID;
 
-@Controller
+
 /**
  * 登录认证控制器
  */
+@Controller
 public class AuthorizeController {
 
     @Autowired
@@ -68,6 +69,7 @@ public class AuthorizeController {
             user.setToken(token1);
             //添加cookie
             response.addCookie(new Cookie("token",token1));
+            //关键新用户 或者更新用户信息
             userService.createOrUpdate(user);
             return "redirect:/";
         }
@@ -86,7 +88,7 @@ public class AuthorizeController {
     @GetMapping("/logout")
     public String logout(HttpServletResponse response,
                          HttpServletRequest request){
-
+        //清楚用户缓存在浏览器的信息
         request.getSession().removeAttribute("user");
         Cookie cookie = new Cookie("token",null);
         //立即传入

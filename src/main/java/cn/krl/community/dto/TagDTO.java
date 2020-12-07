@@ -12,5 +12,4 @@ import java.util.List;
 public class TagDTO {
     private String categoryName;
     private List<String> tags;
-
 }
